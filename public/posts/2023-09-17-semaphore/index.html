@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>세마포란? - inshining</title><meta name="Description" content="inshining blog"><meta property="og:title" content="세마포란?" />
+<meta property="og:description" content="시스템프로그래밍, 데이터베이스를 공부하다보면 계속해서 세마포 개념이 등장해서 명확하게 정리하고자 한다.
+동기화 배경 지식 세마포, 스핀락은 동기화 작업을 수행하기 위한 방법이다. 동기화는 공유 데이터를 일관성을 유지하며 작업하는 것을 의미한다. 이 때 동기화를 처리하기 위한 공간을 임계 공간이라고 한다. 정리하면 세마포나 스핀락과 같은 방법은 임계 영역 안에서 처리 방법에 관한 내용이다.
+스핀락? 스핀락은 세마포보다 비교적 간단한 개념으로 스핀락의 한계로 인해서 세마포 개념이 정립되었기 때문에 스핀락부터 알아보자. 임계 영역이라는 자물쇠를 열고 들어 가기 위해서 열쇠가 필요하다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/2023-09-17-semaphore/" /><meta property="og:image" content="/logo.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-17T16:20:02+05:00" />
+<meta property="article:modified_time" content="2023-09-17T16:20:02+05:00" /><meta property="og:site_name" content="inshining" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="/logo.png" /><meta name="twitter:title" content="세마포란?"/>
+<meta name="twitter:description" content="시스템프로그래밍, 데이터베이스를 공부하다보면 계속해서 세마포 개념이 등장해서 명확하게 정리하고자 한다.
+동기화 배경 지식 세마포, 스핀락은 동기화 작업을 수행하기 위한 방법이다. 동기화는 공유 데이터를 일관성을 유지하며 작업하는 것을 의미한다. 이 때 동기화를 처리하기 위한 공간을 임계 공간이라고 한다. 정리하면 세마포나 스핀락과 같은 방법은 임계 영역 안에서 처리 방법에 관한 내용이다.
+스핀락? 스핀락은 세마포보다 비교적 간단한 개념으로 스핀락의 한계로 인해서 세마포 개념이 정립되었기 때문에 스핀락부터 알아보자. 임계 영역이라는 자물쇠를 열고 들어 가기 위해서 열쇠가 필요하다."/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/posts/2023-09-17-semaphore/" /><link rel="next" href="/posts/2023-11-8-listvsdeque/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "세마포란?",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/posts\/2023-09-17-semaphore\/"
+        },"genre": "posts","keywords": "Post Formats, readability, standard","wordcount":  324 ,
+        "url": "\/posts\/2023-09-17-semaphore\/","datePublished": "2023-09-17T16:20:02+05:00","dateModified": "2023-09-17T16:20:02+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Kim In Yeob"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="auto" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="inshining">inshining</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="inshining">inshining</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">세마포란?</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Kim In Yeob</a></span>&nbsp;<span class="post-category">included in <a href="/categories/os/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>OS</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-09-17">2023-09-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;324 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#동기화-배경-지식">동기화 배경 지식</a></li>
+    <li><a href="#스핀락">스핀락?</a></li>
+    <li><a href="#세마포란">세마포란?</a>
+      <ul>
+        <li><a href="#참고-자료">참고 자료</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>시스템프로그래밍, 데이터베이스를 공부하다보면 계속해서 세마포 개념이 등장해서 명확하게 정리하고자 한다.</p>
+<h2 id="동기화-배경-지식">동기화 배경 지식</h2>
+<p>세마포, 스핀락은 동기화 작업을 수행하기 위한 방법이다. 동기화는 공유 데이터를 일관성을 유지하며 작업하는 것을 의미한다. 이 때 동기화를 처리하기 위한 공간을 임계 공간이라고 한다. 정리하면 세마포나 스핀락과 같은 방법은 임계 영역 안에서 처리 방법에 관한 내용이다.</p>
+<h2 id="스핀락">스핀락?</h2>
+<p>스핀락은 세마포보다 비교적 간단한 개념으로 스핀락의 한계로 인해서 세마포 개념이 정립되었기 때문에 스핀락부터 알아보자. 임계 영역이라는 자물쇠를 열고 들어 가기 위해서 열쇠가 필요하다. 스핀락은 계속해서 열쇠를 탈취하기 위해서 공유 변수 값에 접근한다. 이 과정에서 TestAndSet 이라는 cpu 레벨에서 쓰이는 함수가 쓰인다. TestAndSet은 실행 중간에 간섭을 받지 않고 같은 메모리 영역이라면 동시에 실행할 수 없다. 이러한 특징때문에 동기적으로 해당 함수를 사용할 수 있다. TestAndSet이 동기적으로 처리된다고 해도 하나 프로세스 혹은 스레드가 임계 영역에서 작업을 하는 동안 다른 프로세스 혹은 스레드는 계속해서 TestAndSet 함수를 호출해야 하기 때문에 cpu 낭비로 이어진다.</p>
+<h2 id="세마포란">세마포란?</h2>
+<p>여러 스핀락의 한계를 극복하기 위해서 세마포가 탄생하였다.</p>
+<p>세마포는 큐라는 대기 공간을 마련하여서 cpu 소비를 최소화하였다. 음수가 아닌 정수를 설정하여서 공유 데이터에 다중 이용자가 접근할 수 있도록 한 것도 하나 특징 중 하나이다. 세마포는 크게 2가지 함수로 구성되어 있다.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="err">#</span><span class="w"> </span><span class="n">P</span><span class="w"> </span><span class="nf">연산</span><span class="w"> </span><span class="p">(</span><span class="n">자물쇠</span><span class="w"> </span><span class="n">열거나</span><span class="w"> </span><span class="n">자물쇠</span><span class="w"> </span><span class="n">잠구는</span><span class="w"> </span><span class="n">경우</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">S</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">0</span><span class="p">)</span><span class="w"> </span><span class="n">then</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">else</span><span class="w"> </span><span class="n">wait</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="n">Q</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="err">#</span><span class="w"> </span><span class="n">P</span><span class="w"> </span><span class="nf">연산</span><span class="w"> </span><span class="p">(</span><span class="n">자물쇠</span><span class="w"> </span><span class="n">열거나</span><span class="w"> </span><span class="n">자물쇠</span><span class="w"> </span><span class="n">잠구는</span><span class="w"> </span><span class="n">경우</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">S</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">0</span><span class="p">)</span><span class="w"> </span><span class="n">then</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">else</span><span class="w"> </span><span class="n">wait</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="n">Q</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="err">#</span><span class="w"> </span><span class="n">일끝내고</span><span class="w"> </span><span class="n">나갈</span><span class="w"> </span><span class="n">때</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="n">실행</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">waiting</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">Q</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">then</span><span class="w"> </span><span class="n">wake</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">them</span><span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="w">
+</span></span></span></code></pre></div><p>P연산을 통해서 0이상 S가 있으면 임계 공간에 접근하고 그렇지 못하면  q 에 대기한다. 동기화 작업을 마치면 V 함수를 수행하여서 대기하는 Q가 있으면 깨우고 나가고 그렇지 않으면 S 을 증가하고 나간다. 이러한 세마포 작업으로 인해서 순차적으로 작업을 수행할 수 있다.</p>
+<h3 id="참고-자료">참고 자료</h3>
+<p><a href="https://youtu.be/gTkvX2Awj6g?si=kFrQKXW7qRHnzboZ" target="_blank" rel="noopener noreffer ">스핀락(spinlock) 뮤텍스(mutex) 세마포(semaphore) 각각의 특징과 차이 완벽 설명! 뮤텍스는 바이너리 세마포가 아니라는 것도 설명합니다!</a></p>
+<p><a href="https://youtu.be/CitsUz-Dx7A?si=5sXXZE7kPky8FwBT" target="_blank" rel="noopener noreffer ">[OS ] Lec 6. Process Synchronization and Mutual Exclusion (5/7) - Semaphore (OS supported Sol. 2)</a></p>
+<p><a href="https://hoyeonkim795.github.io/posts/mutex-semaphore/" target="_blank" rel="noopener noreffer ">[OS] 뮤텍스와 세마포어 (Mutex and Semaphore)</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-09-17</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="post-info-comment"><script src="https://utteranc.es/client.js"
+        repo="inshining/inshining.github.io"
+        issue-term="pathname"
+        label="✨💬✨"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script></div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/post-formats/">Post Formats</a>,&nbsp;<a href="/tags/readability/">readability</a>,&nbsp;<a href="/tags/standard/">standard</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+    
+    <div class="post-nav">
+            <a href="/posts/2023-11-8-listvsdeque/" class="next" rel="next" title="List vs Deque in Python">List vs Deque in Python<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="utterances" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.121.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Kim In Yeob</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"Comment","lightTheme":"github-light","repo":"inshining/inshining.github.io"}}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

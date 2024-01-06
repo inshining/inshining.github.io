@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>List vs Deque in Python - inshining</title><meta name="Description" content="inshining blog"><meta property="og:title" content="List vs Deque in Python" />
+<meta property="og:description" content="파이썬으로 코딩테스트를 준비하다보면 가끔적 list보다 deque를 사용하라는 팁을 듣곤 한다. list 보다 deque가 수행시간이 빠르다는 이유였다. 그럼에도 불구하고 기존 문제들을 풀어오면서 deque의 필요성을 느끼지 못했기에 별로 신경쓰지 않았다. 카카오 인터쉽 문제를 풀다보니 deque를 써야하는 상황이 생겨서 구체적으로 deque와 list가 어떻게 다른지 궁금했다.
+List in Python 기본적으로 array 구조를 띈다. 즉, 물리적으로 연속된 Linear 자료 구조이다. 그러나 array랑 다르게 파이썬 list는 같은 데이터 타입일 필요가 없다. Deque in Python Deque는 FIFO(First In Frist Out) 구조를 띈다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/2023-11-8-listvsdeque/" /><meta property="og:image" content="/logo.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-08T16:20:02+05:00" />
+<meta property="article:modified_time" content="2023-11-08T16:20:02+05:00" /><meta property="og:site_name" content="inshining" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="/logo.png" /><meta name="twitter:title" content="List vs Deque in Python"/>
+<meta name="twitter:description" content="파이썬으로 코딩테스트를 준비하다보면 가끔적 list보다 deque를 사용하라는 팁을 듣곤 한다. list 보다 deque가 수행시간이 빠르다는 이유였다. 그럼에도 불구하고 기존 문제들을 풀어오면서 deque의 필요성을 느끼지 못했기에 별로 신경쓰지 않았다. 카카오 인터쉽 문제를 풀다보니 deque를 써야하는 상황이 생겨서 구체적으로 deque와 list가 어떻게 다른지 궁금했다.
+List in Python 기본적으로 array 구조를 띈다. 즉, 물리적으로 연속된 Linear 자료 구조이다. 그러나 array랑 다르게 파이썬 list는 같은 데이터 타입일 필요가 없다. Deque in Python Deque는 FIFO(First In Frist Out) 구조를 띈다."/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/posts/2023-11-8-listvsdeque/" /><link rel="prev" href="/posts/2023-09-17-semaphore/" /><link rel="next" href="/posts/2023-10-2-memcached-copy/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "List vs Deque in Python",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/posts\/2023-11-8-listvsdeque\/"
+        },"genre": "posts","keywords": "python","wordcount":  444 ,
+        "url": "\/posts\/2023-11-8-listvsdeque\/","datePublished": "2023-11-08T16:20:02+05:00","dateModified": "2023-11-08T16:20:02+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Kim In Yeob"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="auto" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="inshining">inshining</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="inshining">inshining</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">List vs Deque in Python</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Kim In Yeob</a></span>&nbsp;<span class="post-category">included in <a href="/categories/python/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>python</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-11-08">2023-11-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;444 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#list">List</a></li>
+        <li><a href="#deque">Deque</a></li>
+        <li><a href="#결론">결론</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#출처">출처</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>파이썬으로 코딩테스트를 준비하다보면 가끔적 list보다 deque를 사용하라는 팁을 듣곤 한다. list 보다 deque가 수행시간이 빠르다는 이유였다. 그럼에도 불구하고 기존 문제들을 풀어오면서 deque의 필요성을 느끼지 못했기에 별로 신경쓰지 않았다. 카카오 인터쉽 문제를 풀다보니 deque를 써야하는 상황이 생겨서 구체적으로 deque와 list가 어떻게 다른지 궁금했다.</p>
+<h1 id="list-in-python">List in Python</h1>
+<ul>
+<li>기본적으로 array 구조를 띈다.</li>
+<li>즉, 물리적으로 연속된 Linear 자료 구조이다.</li>
+<li>그러나 array랑 다르게 파이썬 list는 같은 데이터 타입일 필요가 없다.</li>
+</ul>
+<h1 id="deque-in-python">Deque in Python</h1>
+<ul>
+<li>Deque는 FIFO(First In Frist Out) 구조를 띈다.</li>
+<li>다만, 맨 앞과 맨 뒤에 요소를 추가하거나 삭제할 수 있다.</li>
+<li>in-built가 아니기 때문에 collections 라이브러리에서 불러와야 한다.</li>
+</ul>
+<h1 id="구현-측면에서-차이">구현 측면에서 차이</h1>
+<h3 id="list">List</h3>
+<p>Cpython 기준으로 List는 array of pointers 로 구현되어 있다. 리스트 구현체에 &lsquo;size of the list&rsquo;와 &lsquo;allocated slots&rsquo; 이 존재한다. &lsquo;size of the list&rsquo;는  len() 메소드의 호출할 때 쓰이는 리스트의 요소의 개수를 의미한다. 앞서 서술했듯, 리스트는 포인터의 배열이기 때문에 배열을 반복적으로 할당하는 것을 막기 위해서 allocated slots으로 일정 크기 포인터가 들어갈 메모리를 확보한다. 즉, allocated slots은 size of the list 보다 크거나 같다.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="../assets/images/list_cpython.png"
+        data-srcset="../assets/images/list_cpython.png, ../assets/images/list_cpython.png 1.5x, ../assets/images/list_cpython.png 2x"
+        data-sizes="auto"
+        alt="../assets/images/list_cpython.png"
+        title="list_cpython" /></p>
+<p>요소를 추가할 때, 2의 제곱으로 배열의 크기를 resize한다.</p>
+<blockquote>
+<p>Though <a href="https://docs.python.org/3/library/stdtypes.html#list" title="list" target="_blank" rel="noopener noreffer "><code>list</code></a> objects support similar operations, they are optimized for fast fixed-length operations and incur O(n) memory movement costs for <code>pop(0)</code> and <code>insert(0, v)</code> operations which change both the size and position of the underlying data representation.</p>
+</blockquote>
+<p>공식 문서에서 list 맨 앞에서 삽입과 제거 과정에서 O(n)이 일어날 것으로 지적하였다. list가 array of pointers로 구현되어 있기 때문에 맨 앞 요소를 제거하거나 추가할 경우 새로운 배열로 옮겨서 담아야 하기 때문에 O(n)이 발생한다. 이 지점에서 deque와 차이점이 존재한다.</p>
+<h3 id="deque">Deque</h3>
+<p>Deque는 Double-ended Queue 를 일컫는다. 즉, 양 끝 단에서 추가와 제거가 가능하다는 뜻이다. Deque는 구조적으로 Double Linked List 이다. 이러한 자료구조의 각 노드는 앞 뒤 노드의 주소를 보유하고 있다. 물리적으로 메모리가 일련로 존재하지 않기 때문에 메모리 재할당할 필요가 없다.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="../assets/images/double_linked_list.png"
+        data-srcset="../assets/images/double_linked_list.png, ../assets/images/double_linked_list.png 1.5x, ../assets/images/double_linked_list.png 2x"
+        data-sizes="auto"
+        alt="../assets/images/double_linked_list.png"
+        title="double_linked_list" />
+그림으로 보면 위와 같다. head에서 appendleft(), popleft() 가 수행되고, tail에서 append()와 appendleft()과 수행된다.</p>
+<h3 id="결론">결론</h3>
+<p>테이블로 두 자료구조의 차이를 나타내보면 다음과 같다.</p>
+<p>Append Function</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Position</td>
+<td>List</td>
+<td>Deque</td>
+</tr>
+<tr>
+<td>Beginning</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Middle</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>End</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<p>Pop Function</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Position</td>
+<td>List</td>
+<td>Deque</td>
+</tr>
+<tr>
+<td>Beginning</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Middle</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>End</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="문제-풀이에-적용하기">문제 풀이에 적용하기</h1>
+<p>문제 <a href="https://school.programmers.co.kr/learn/courses/30/lessons/118667" target="_blank" rel="noopener noreffer ">출처</a>
+특정 테스트케이스에서 시간초과가 발생했다.</p>
+<pre tabindex="0"><code>while i &lt; N:
+        ~~
+        if target_v &gt; q1_sum:
+            v = list1.pop(0)
+            list1_sum += v
+            list2.append(v)
+	    ~~~
+</code></pre><p><code>list1.pop(0)</code> 이 O(n)이기 때문에 최악의 경우 위 코드에서 O(N ^ 2)이 발생한다.</p>
+<p>deque를 적용해보면 다음과 같다.</p>
+<pre tabindex="0"><code>while i &lt; N :
+        ~~
+        if target_v &gt; q1_sum:
+            v = q2.popleft()
+            q1_sum += v
+            q1.append(v)
+        ~~
+</code></pre><p>deque에서 <code>popleft()</code> 는 O(1)을 보장하기 때문에 최악의 경우에도 O(N)이 되었다.</p>
+<h1 id="list-vs-deque-선택하기">List vs Deque 선택하기</h1>
+<p>상황에 맞는 자료구조를 선택할 필요가 있다. 위 사례처럼 맨 앞과 맨 뒤 요소만을 접근해도 괜찮으면 deque 사용을 고려할 만하다. 각 요소에 접근하기 위해서 index를 사용하거나 Slicing 을 사용해야 하는 경우에 List를 사용하는 것이 더 현명하다.</p>
+<h3 id="출처">출처</h3>
+<ul>
+<li><a href="https://www.laurentluce.com/posts/python-list-implementation/" target="_blank" rel="noopener noreffer ">https://www.laurentluce.com/posts/python-list-implementation/</a></li>
+<li><a href="https://dev.to/v_it_aly/python-deque-vs-listwh-25i9" target="_blank" rel="noopener noreffer ">https://dev.to/v_it_aly/python-deque-vs-listwh-25i9</a></li>
+<li><a href="https://stackoverflow.com/questions/6256983/how-are-deques-in-python-implemented-and-when-are-they-worse-than-lists" target="_blank" rel="noopener noreffer ">https://stackoverflow.com/questions/6256983/how-are-deques-in-python-implemented-and-when-are-they-worse-than-lists</a></li>
+<li><a href="https://www.askpython.com/python/list/list-vs-deque-comparison" target="_blank" rel="noopener noreffer ">https://www.askpython.com/python/list/list-vs-deque-comparison</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-11-08</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="post-info-comment"><script src="https://utteranc.es/client.js"
+        repo="inshining/inshining.github.io"
+        issue-term="pathname"
+        label="✨💬✨"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script></div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/python/">python</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+    
+    <div class="post-nav"><a href="/posts/2023-09-17-semaphore/" class="prev" rel="prev" title="세마포란?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>세마포란?</a>
+            <a href="/posts/2023-10-2-memcached-copy/" class="next" rel="next" title="Memcached VS Redis">Memcached VS Redis<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="utterances" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.121.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Kim In Yeob</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"Comment","lightTheme":"github-light","repo":"inshining/inshining.github.io"}}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

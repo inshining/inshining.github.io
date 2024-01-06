@@ -1,0 +1,56 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Tags - Tag - inshining</title>
+        <link>/tags/</link>
+        <description>Tags - Tag - inshining</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>inshining.kim@gmail.com (Kim In Yeob)</managingEditor>
+            <webMaster>inshining.kim@gmail.com (Kim In Yeob)</webMaster><lastBuildDate>Fri, 05 Jan 2024 16:20:02 &#43;0500</lastBuildDate><atom:link href="/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>Docker</title>
+    <link>/tags/docker/</link>
+    <pubDate>Fri, 05 Jan 2024 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/tags/docker/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>DB</title>
+    <link>/tags/db/</link>
+    <pubDate>Fri, 10 Nov 2023 12:00:00 &#43;0900</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/tags/db/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>python</title>
+    <link>/tags/python/</link>
+    <pubDate>Wed, 08 Nov 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/tags/python/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Post Formats</title>
+    <link>/tags/post-formats/</link>
+    <pubDate>Sun, 17 Sep 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/tags/post-formats/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>readability</title>
+    <link>/tags/readability/</link>
+    <pubDate>Sun, 17 Sep 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/tags/readability/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>standard</title>
+    <link>/tags/standard/</link>
+    <pubDate>Sun, 17 Sep 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/tags/standard/</guid>
+    <description><![CDATA[]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,46 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - inshining</title>
+        <link>/posts/</link>
+        <description>All Posts | inshining</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>inshining.kim@gmail.com (Kim In Yeob)</managingEditor>
+            <webMaster>inshining.kim@gmail.com (Kim In Yeob)</webMaster><lastBuildDate>Fri, 05 Jan 2024 16:20:02 &#43;0500</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>도커를 곁들인 프로젝트 리팩토링하기</title>
+    <link>/posts/2024-01-4-refactoring-with-docekr/</link>
+    <pubDate>Fri, 05 Jan 2024 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2024-01-4-refactoring-with-docekr/</guid>
+    <description><![CDATA[CV를 업로드하면 기술 인터뷰를 연습해 볼 수 있는 프로젝트 에 합류하게 되었다. 이미 백엔드 서버가 구성되어 있었기 때문에 퍼블릭 레포로 변경하면서 필요한 작업과 자동 배포 위주로 기여하였다.
+기존 문제 보안 이슈 : 퍼블릭 레포로 변경하면서 하드 코딩되어 있는 보안 키 노출 자동 배포 : AWS EC2에 SSH로 접근하여 수동 배포 기존 문제를 정의해보면 위와 같았다. 문제해결 방향 보안 이슈 노출되면 안될 보안키를 .env파일로 옮겨두고 dotenv 라이브러리로 환경변수를 불러오는 식으로 변경하였다. 레포를 검토하고 보안 이슈가 생길 코드를 이슈로 제보하였다.]]></description>
+</item>
+<item>
+    <title>Memcached VS Redis</title>
+    <link>/posts/2023-10-2-memcached-copy/</link>
+    <pubDate>Fri, 10 Nov 2023 12:00:00 &#43;0900</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2023-10-2-memcached-copy/</guid>
+    <description><![CDATA[Facebook의 서버 아키텍처 관련 블로그 글 을 보고 Memcached와 Redis 간 차이점에 대해 궁금해서 정리해보았다.
+Memcached vs Redis? Memcached 와 redis 모두 오픈 소스 인메모리 데이터 베이스로 캐시 용도로 사용된다. 두 사이 몇가지 차이점이 존재한다.
+Data Structure and Storage: Mecached: 단순 Key-Value Pair 구조이다. 간단한 String 데이터를 저장할 수 있다. Redis: 다양한 종류(String, list, set, sorted set, bit array)와 같은 다양한 구조 데이터 구조를 지원한다. Persistence Memcached: data persistence를 지원하지 않는다.]]></description>
+</item>
+<item>
+    <title>List vs Deque in Python</title>
+    <link>/posts/2023-11-8-listvsdeque/</link>
+    <pubDate>Wed, 08 Nov 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2023-11-8-listvsdeque/</guid>
+    <description><![CDATA[파이썬으로 코딩테스트를 준비하다보면 가끔적 list보다 deque를 사용하라는 팁을 듣곤 한다. list 보다 deque가 수행시간이 빠르다는 이유였다. 그럼에도 불구하고 기존 문제들을 풀어오면서 deque의 필요성을 느끼지 못했기에 별로 신경쓰지 않았다. 카카오 인터쉽 문제를 풀다보니 deque를 써야하는 상황이 생겨서 구체적으로 deque와 list가 어떻게 다른지 궁금했다.
+List in Python 기본적으로 array 구조를 띈다. 즉, 물리적으로 연속된 Linear 자료 구조이다. 그러나 array랑 다르게 파이썬 list는 같은 데이터 타입일 필요가 없다. Deque in Python Deque는 FIFO(First In Frist Out) 구조를 띈다.]]></description>
+</item>
+<item>
+    <title>세마포란?</title>
+    <link>/posts/2023-09-17-semaphore/</link>
+    <pubDate>Sun, 17 Sep 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2023-09-17-semaphore/</guid>
+    <description><![CDATA[시스템프로그래밍, 데이터베이스를 공부하다보면 계속해서 세마포 개념이 등장해서 명확하게 정리하고자 한다.
+동기화 배경 지식 세마포, 스핀락은 동기화 작업을 수행하기 위한 방법이다. 동기화는 공유 데이터를 일관성을 유지하며 작업하는 것을 의미한다. 이 때 동기화를 처리하기 위한 공간을 임계 공간이라고 한다. 정리하면 세마포나 스핀락과 같은 방법은 임계 영역 안에서 처리 방법에 관한 내용이다.
+스핀락? 스핀락은 세마포보다 비교적 간단한 개념으로 스핀락의 한계로 인해서 세마포 개념이 정립되었기 때문에 스핀락부터 알아보자. 임계 영역이라는 자물쇠를 열고 들어 가기 위해서 열쇠가 필요하다.]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>python - Category - inshining</title>
+        <link>/categories/python/</link>
+        <description>python - Category - inshining</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>inshining.kim@gmail.com (Kim In Yeob)</managingEditor>
+            <webMaster>inshining.kim@gmail.com (Kim In Yeob)</webMaster><lastBuildDate>Wed, 08 Nov 2023 16:20:02 &#43;0500</lastBuildDate><atom:link href="/categories/python/" rel="self" type="application/rss+xml" /><item>
+    <title>List vs Deque in Python</title>
+    <link>/posts/2023-11-8-listvsdeque/</link>
+    <pubDate>Wed, 08 Nov 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2023-11-8-listvsdeque/</guid>
+    <description><![CDATA[파이썬으로 코딩테스트를 준비하다보면 가끔적 list보다 deque를 사용하라는 팁을 듣곤 한다. list 보다 deque가 수행시간이 빠르다는 이유였다. 그럼에도 불구하고 기존 문제들을 풀어오면서 deque의 필요성을 느끼지 못했기에 별로 신경쓰지 않았다. 카카오 인터쉽 문제를 풀다보니 deque를 써야하는 상황이 생겨서 구체적으로 deque와 list가 어떻게 다른지 궁금했다.
+List in Python 기본적으로 array 구조를 띈다. 즉, 물리적으로 연속된 Linear 자료 구조이다. 그러나 array랑 다르게 파이썬 list는 같은 데이터 타입일 필요가 없다. Deque in Python Deque는 FIFO(First In Frist Out) 구조를 띈다.]]></description>
+</item>
+</channel>
+</rss>

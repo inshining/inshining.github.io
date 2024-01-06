@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>도커를 곁들인 프로젝트 리팩토링하기 - inshining</title><meta name="Description" content="inshining blog"><meta property="og:title" content="도커를 곁들인 프로젝트 리팩토링하기" />
+<meta property="og:description" content="CV를 업로드하면 기술 인터뷰를 연습해 볼 수 있는 프로젝트 에 합류하게 되었다. 이미 백엔드 서버가 구성되어 있었기 때문에 퍼블릭 레포로 변경하면서 필요한 작업과 자동 배포 위주로 기여하였다.
+기존 문제 보안 이슈 : 퍼블릭 레포로 변경하면서 하드 코딩되어 있는 보안 키 노출 자동 배포 : AWS EC2에 SSH로 접근하여 수동 배포 기존 문제를 정의해보면 위와 같았다. 문제해결 방향 보안 이슈 노출되면 안될 보안키를 .env파일로 옮겨두고 dotenv 라이브러리로 환경변수를 불러오는 식으로 변경하였다. 레포를 검토하고 보안 이슈가 생길 코드를 이슈로 제보하였다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/2024-01-4-refactoring-with-docekr/" /><meta property="og:image" content="/logo.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-01-05T16:20:02+05:00" />
+<meta property="article:modified_time" content="2024-01-05T16:20:02+05:00" /><meta property="og:site_name" content="inshining" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="/logo.png" /><meta name="twitter:title" content="도커를 곁들인 프로젝트 리팩토링하기"/>
+<meta name="twitter:description" content="CV를 업로드하면 기술 인터뷰를 연습해 볼 수 있는 프로젝트 에 합류하게 되었다. 이미 백엔드 서버가 구성되어 있었기 때문에 퍼블릭 레포로 변경하면서 필요한 작업과 자동 배포 위주로 기여하였다.
+기존 문제 보안 이슈 : 퍼블릭 레포로 변경하면서 하드 코딩되어 있는 보안 키 노출 자동 배포 : AWS EC2에 SSH로 접근하여 수동 배포 기존 문제를 정의해보면 위와 같았다. 문제해결 방향 보안 이슈 노출되면 안될 보안키를 .env파일로 옮겨두고 dotenv 라이브러리로 환경변수를 불러오는 식으로 변경하였다. 레포를 검토하고 보안 이슈가 생길 코드를 이슈로 제보하였다."/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/posts/2024-01-4-refactoring-with-docekr/" /><link rel="prev" href="/posts/2023-10-2-memcached-copy/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "도커를 곁들인 프로젝트 리팩토링하기",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/posts\/2024-01-4-refactoring-with-docekr\/"
+        },"genre": "posts","keywords": "Docker","wordcount":  579 ,
+        "url": "\/posts\/2024-01-4-refactoring-with-docekr\/","datePublished": "2024-01-05T16:20:02+05:00","dateModified": "2024-01-05T16:20:02+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Kim In Yeob"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="auto" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="inshining">inshining</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="inshining">inshining</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">도커를 곁들인 프로젝트 리팩토링하기</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Kim In Yeob</a></span>&nbsp;<span class="post-category">included in <a href="/categories/docker/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Docker</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-01-05">2024-01-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;579 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#보안-이슈">보안 이슈</a></li>
+    <li><a href="#자동-배포">자동 배포</a>
+      <ul>
+        <li><a href="#cd-도구-githubactions-vs-jenkins">CD 도구? GitHubActions vs Jenkins</a></li>
+        <li><a href="#code-vs-docker">Code vs Docker</a></li>
+      </ul>
+    </li>
+    <li><a href="#구현">구현</a>
+      <ul>
+        <li><a href="#최종-결과물">최종 결과물</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>CV를 업로드하면 기술 인터뷰를 연습해 볼 수 있는 <a href="https://github.com/ddoddii/resume-ai-chat" target="_blank" rel="noopener noreffer ">프로젝트</a> 에 합류하게 되었다. 이미 백엔드 서버가 구성되어 있었기 때문에 퍼블릭 레포로 변경하면서 필요한 작업과 자동 배포 위주로 기여하였다.</p>
+<h1 id="기존-문제">기존 문제</h1>
+<ul>
+<li>보안 이슈 : 퍼블릭 레포로 변경하면서 하드 코딩되어 있는 보안 키 노출</li>
+<li>자동 배포 : AWS EC2에 SSH로 접근하여 수동 배포
+기존 문제를 정의해보면 위와 같았다.</li>
+</ul>
+<h1 id="문제해결-방향">문제해결 방향</h1>
+<h2 id="보안-이슈">보안 이슈</h2>
+<p>노출되면 안될 보안키를 .env파일로 옮겨두고 dotenv 라이브러리로 환경변수를 불러오는 식으로 변경하였다. 레포를 검토하고 보안 이슈가 생길 코드를 이슈로 제보하였다. 문제가 될 코드의 종류는 다음과 같았다.</p>
+<ul>
+<li>디비 경로 (sqlite를 사용했기 때문에 디비 파일 경로)</li>
+<li>개인 컴퓨터 파일 경로 (/User/유저이름/home 과 같은 경로)</li>
+<li>JWT 시크릿키, 알고리즘 종류</li>
+<li>GPT 모델 종류
+이와 같은 종류 코드는 보안 문제를 예방하려는 차원에서 선정하였다. 보안 문제는 보수적으로 접근해야 하기 때문에 &ldquo;알고리즘 종류&quot;나 &ldquo;개인 컴퓨터 파일 경로&quot;와 같은 불필요한 정보는 노출되지 않는 것이 좋다고 보았다. &ldquo;.env&quot;파일에 변수를 정리하면 하드코딩하지 않고 주요 변수를 관리할 수 있어서 유지보수 차원에서 이득이 될 수 있다.</li>
+</ul>
+<h2 id="자동-배포">자동 배포</h2>
+<p>자동 배포를 구현하기 앞서 몇가지 선택지를 고려해야 했다.</p>
+<h3 id="cd-도구-githubactions-vs-jenkins">CD 도구? GitHubActions vs Jenkins</h3>
+<p>결론적으로 GitHubActions를 선택하기로 했다. 그 이유는 다음과 같다.</p>
+<ol>
+<li>비용: 자동 배포를 위해서 컴퓨터 리소스를 할당해야 하는데. GitHubActions는 일정 수준까지 무료로 이용할 수 있다. 반면, Jenkins는 따로 컴퓨팅 자원을 마련해야 한다.</li>
+<li>구성의 편리성: GitHubActions는 yaml 형식 스크립트를 짜면 바로 CI/CD 모두 구현하기 쉽다. 반면, Jenkins는 설치부터 환경설정까지 오랜 시간이 걸릴 것으로 예상하였다.</li>
+</ol>
+<h3 id="code-vs-docker">Code vs Docker</h3>
+<p>CD 도구를 선택했다면, 다음으로 어떤 형식으로 백엔드 서버에 배포할 코드를 전달할지 고민하였다. 선택지도 정리해보면 아래와 같았다.</p>
+<ol>
+<li>코드를 압축하여 서버에 전달하기</li>
+<li>AWS EB 사용하기 (AWS EB는 S3에 코드를 압축하여 필요한 버전을 로드하는 식으로 동작한다. 도커도 도입할 수 있다.)</li>
+<li>Docker 사용하기 + DockerHub</li>
+</ol>
+<p>3번 선택지인 Docker를 사용하기로 했다. 가장 큰 이유는 도커를 공부해보고 싶은 팀원의 의지가 강했다는 점이다. Redis와 같은 다른 툴을 사용할 있는 확정성이 강하다는 점도 선택의 이유가 될 수 있다.</p>
+<h2 id="구현">구현</h2>
+<p>구현 과정에서 <a href="https://github.com/ddoddii" target="_blank" rel="noopener noreffer ">@소은</a> 과 함께 페어 프로그래밍하였다.
+함께하는 팀원이 도커를 처음 사용해보기도 하고, 디버깅하기 쉽게 하기 위해서 단계를 나눠서 프로그래밍하였다.
+그 단계는 다음과 같다.</p>
+<ol>
+<li>로컬에서 도커 빌드 실행</li>
+<li>도커 허브에 올려보기</li>
+<li>이를 수동으로 ec2에서 pull해서 실행하기</li>
+<li>이 과정을 깃헙액션으로 맡기기</li>
+<li>디비 사용을 위한 볼륨 설정하기</li>
+<li>환경 변수 사용을 위한 .env 파일 주입하기</li>
+</ol>
+<p>추후에 튜토리얼 형식으로 코드와 함께 글을 올리도록 하겠다..</p>
+<h3 id="최종-결과물">최종 결과물</h3>
+<pre tabindex="0"><code>#dockerfile
+
+FROM python:3.10
+
+WORKDIR /app/
+
+COPY . /app/
+COPY ./requirements.txt /app/
+
+RUN pip install -r requirements.txt
+
+VOLUME /app/resume-db
+
+CMD uvicorn --host=0.0.0.0 --port 8000 main:app
+</code></pre><pre tabindex="0"><code>#GitHubActions 
+name: ci
+
+on:
+  push:
+    branches:
+      - &#34;main&#34;
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        # Build and push to dockerhub
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}:latest
+
+      # EC2 인스턴스 접속 및 애플리케이션 실행
+      -
+        name: Application Run
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+
+          script: |
+            sudo docker ps -a --filter &#34;name=${{ secrets.PROJECT_NAME }}&#34; | xargs -r docker stop
+            sudo docker ps -a --filter &#34;name=${{ secrets.PROJECT_NAME }}&#34; | xargs -r docker kill 
+            sudo docker ps -a --filter &#34;name=${{ secrets.PROJECT_NAME }}&#34; | xargs -r docker rm -f
+            sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }} 
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+  
+            sudo docker run -p  ${{ secrets.PORT }}:${{ secrets.PORT }} \
+            --env-file ${{ secrets.ENV }} \
+            --name ${{ secrets.PROJECT_NAME }} \
+            -v /home/ubuntu/resume_ai_chat.db:/app/resume_ai_chat.db \
+            -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+</code></pre><p>레포를 자세히 알고 싶다면? <a href="https://github.com/ddoddii/resume-ai-chat/tree/main" target="_blank" rel="noopener noreffer ">링크</a></p>
+<h1 id="shout-out">Shout-out</h1>
+<p>이번 프로젝트 진행하면서 잔소리랑 헛소리를 번갈아가면서 했음에도 잘 따라준 <a href="https://github.com/ddoddii" target="_blank" rel="noopener noreffer ">@소은</a>님에게 감사하다고 전하고 싶다.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-01-05</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="post-info-comment"><script src="https://utteranc.es/client.js"
+        repo="inshining/inshining.github.io"
+        issue-term="pathname"
+        label="✨💬✨"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script></div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/docker/">Docker</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+    
+    <div class="post-nav"><a href="/posts/2023-10-2-memcached-copy/" class="prev" rel="prev" title="Memcached VS Redis"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Memcached VS Redis</a></div>
+</div>
+<div id="comments"><div id="utterances" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.121.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Kim In Yeob</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"Comment","lightTheme":"github-light","repo":"inshining/inshining.github.io"}}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

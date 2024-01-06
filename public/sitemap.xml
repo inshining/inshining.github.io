@@ -1,0 +1,22 @@
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    ><url>
+            <loc>/categories/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/docker/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/categories/docker/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/posts/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/posts/2024-01-4-refactoring-with-docekr/</loc><lastmod>2024-01-05T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/db/</loc><lastmod>2023-11-10T12:00:00&#43;09:00</lastmod></url><url>
+            <loc>/categories/db/</loc><lastmod>2023-11-10T12:00:00&#43;09:00</lastmod></url><url>
+            <loc>/posts/2023-10-2-memcached-copy/</loc><lastmod>2023-11-10T12:00:00&#43;09:00</lastmod></url><url>
+            <loc>/posts/2023-11-8-listvsdeque/</loc><lastmod>2023-11-08T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/python/</loc><lastmod>2023-11-08T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/categories/python/</loc><lastmod>2023-11-08T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/categories/os/</loc><lastmod>2023-09-17T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/post-formats/</loc><lastmod>2023-09-17T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/readability/</loc><lastmod>2023-09-17T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/tags/standard/</loc><lastmod>2023-09-17T16:20:02&#43;05:00</lastmod></url><url>
+            <loc>/posts/2023-09-17-semaphore/</loc><lastmod>2023-09-17T16:20:02&#43;05:00</lastmod></url></urlset>

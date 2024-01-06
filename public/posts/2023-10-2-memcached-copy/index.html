@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Memcached VS Redis - inshining</title><meta name="Description" content="inshining blog"><meta property="og:title" content="Memcached VS Redis" />
+<meta property="og:description" content="Facebook의 서버 아키텍처 관련 블로그 글 을 보고 Memcached와 Redis 간 차이점에 대해 궁금해서 정리해보았다.
+Memcached vs Redis? Memcached 와 redis 모두 오픈 소스 인메모리 데이터 베이스로 캐시 용도로 사용된다. 두 사이 몇가지 차이점이 존재한다.
+Data Structure and Storage: Mecached: 단순 Key-Value Pair 구조이다. 간단한 String 데이터를 저장할 수 있다. Redis: 다양한 종류(String, list, set, sorted set, bit array)와 같은 다양한 구조 데이터 구조를 지원한다. Persistence Memcached: data persistence를 지원하지 않는다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/2023-10-2-memcached-copy/" /><meta property="og:image" content="/logo.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-10T12:00:00+09:00" />
+<meta property="article:modified_time" content="2023-11-10T12:00:00+09:00" /><meta property="og:site_name" content="inshining" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="/logo.png" /><meta name="twitter:title" content="Memcached VS Redis"/>
+<meta name="twitter:description" content="Facebook의 서버 아키텍처 관련 블로그 글 을 보고 Memcached와 Redis 간 차이점에 대해 궁금해서 정리해보았다.
+Memcached vs Redis? Memcached 와 redis 모두 오픈 소스 인메모리 데이터 베이스로 캐시 용도로 사용된다. 두 사이 몇가지 차이점이 존재한다.
+Data Structure and Storage: Mecached: 단순 Key-Value Pair 구조이다. 간단한 String 데이터를 저장할 수 있다. Redis: 다양한 종류(String, list, set, sorted set, bit array)와 같은 다양한 구조 데이터 구조를 지원한다. Persistence Memcached: data persistence를 지원하지 않는다."/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/posts/2023-10-2-memcached-copy/" /><link rel="prev" href="/posts/2023-11-8-listvsdeque/" /><link rel="next" href="/posts/2024-01-4-refactoring-with-docekr/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Memcached VS Redis",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/posts\/2023-10-2-memcached-copy\/"
+        },"genre": "posts","keywords": "DB","wordcount":  189 ,
+        "url": "\/posts\/2023-10-2-memcached-copy\/","datePublished": "2023-11-10T12:00:00+09:00","dateModified": "2023-11-10T12:00:00+09:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Kim In Yeob"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="auto" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="inshining">inshining</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="inshining">inshining</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Memcached VS Redis</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Kim In Yeob</a></span>&nbsp;<span class="post-category">included in <a href="/categories/db/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>DB</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-11-10">2023-11-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;189 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#data-structure-and-storage">Data Structure and Storage:</a></li>
+        <li><a href="#persistence">Persistence</a></li>
+        <li><a href="#execution-speed">Execution Speed</a></li>
+        <li><a href="#architecture">Architecture:</a></li>
+        <li><a href="#replication">Replication</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>Facebook의 서버 아키텍처 관련 <a href="https://engineercodex.substack.com/p/how-facebook-scaled-memcached" target="_blank" rel="noopener noreffer ">블로그 글 </a>을 보고
+Memcached와 Redis 간 차이점에 대해 궁금해서 정리해보았다.</p>
+<h1 id="memcached-vs-redis">Memcached vs Redis?</h1>
+<p>Memcached 와 redis 모두 오픈 소스 인메모리 데이터 베이스로 캐시 용도로 사용된다. 두 사이 몇가지 차이점이 존재한다.</p>
+<h3 id="data-structure-and-storage">Data Structure and Storage:</h3>
+<ul>
+<li>Mecached: 단순 Key-Value Pair 구조이다. 간단한 String 데이터를 저장할 수 있다.</li>
+<li>Redis: 다양한 종류(String, list, set, sorted set, bit array)와 같은 다양한 구조 데이터 구조를 지원한다.</li>
+</ul>
+<h3 id="persistence">Persistence</h3>
+<ul>
+<li>Memcached: data persistence를 지원하지 않는다. 서버가 재식하거나 망가지면 데이터 보존이 안 이뤄진다.</li>
+<li>Redis: data persistence를 지원한다. 디스크에 데이터를 쓰기 때문에 서버를 재시작하거나 망가져도 데이터를 복구할 수 있다.</li>
+</ul>
+<blockquote>
+<p>Data Persistence?
+어플리케이션이나 시스템이 더 이상 작동하지 않더라도 데이터를 접근 가능하고 온전하게 남아 있도록 하는 데이터의 특성.</p>
+</blockquote>
+<h3 id="execution-speed">Execution Speed</h3>
+<ul>
+<li>일반적으로 Memcached가 Redis보다 처리 속도가 빠르다. 간단한 데이터 구조만을 지원하기 때문이다.</li>
+</ul>
+<h3 id="architecture">Architecture:</h3>
+<ul>
+<li>Memcached: 멀티 스레드 아키텍처를 지원한다. 한번에 다양한 작동을 할 수 있다. 큰 테이터셋을 스케일업하여서 사용할 수 있다.</li>
+<li>Redis: 단일 스레드 아키텍처리르 지원한다. 하나 프로세스가 하나 명령어를 수행할 수 있다. 여러 Redis 인스턴스를 사용하여서 이 문제를 해결할 수 있다.</li>
+</ul>
+<h3 id="replication">Replication</h3>
+<ul>
+<li>Memcached: replication를 지원하지 않는다. scalability와 durability에 한계가 있다. 서드 파티를 이용하면 이 문제를 해결할 수 있다고 한다.</li>
+<li>Redis: Master-slave 구조를 지원한다. scalability와 고가용성을 확보할 수 있다.</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-11-10</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="post-info-comment"><script src="https://utteranc.es/client.js"
+        repo="inshining/inshining.github.io"
+        issue-term="pathname"
+        label="✨💬✨"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script></div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/db/">DB</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+    
+    <div class="post-nav"><a href="/posts/2023-11-8-listvsdeque/" class="prev" rel="prev" title="List vs Deque in Python"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>List vs Deque in Python</a>
+            <a href="/posts/2024-01-4-refactoring-with-docekr/" class="next" rel="next" title="도커를 곁들인 프로젝트 리팩토링하기">도커를 곁들인 프로젝트 리팩토링하기<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="utterances" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.121.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Kim In Yeob</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"Comment","lightTheme":"github-light","repo":"inshining/inshining.github.io"}}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

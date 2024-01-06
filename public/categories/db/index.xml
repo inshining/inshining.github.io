@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>DB - Category - inshining</title>
+        <link>/categories/db/</link>
+        <description>DB - Category - inshining</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>inshining.kim@gmail.com (Kim In Yeob)</managingEditor>
+            <webMaster>inshining.kim@gmail.com (Kim In Yeob)</webMaster><lastBuildDate>Fri, 10 Nov 2023 12:00:00 &#43;0900</lastBuildDate><atom:link href="/categories/db/" rel="self" type="application/rss+xml" /><item>
+    <title>Memcached VS Redis</title>
+    <link>/posts/2023-10-2-memcached-copy/</link>
+    <pubDate>Fri, 10 Nov 2023 12:00:00 &#43;0900</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2023-10-2-memcached-copy/</guid>
+    <description><![CDATA[Facebook의 서버 아키텍처 관련 블로그 글 을 보고 Memcached와 Redis 간 차이점에 대해 궁금해서 정리해보았다.
+Memcached vs Redis? Memcached 와 redis 모두 오픈 소스 인메모리 데이터 베이스로 캐시 용도로 사용된다. 두 사이 몇가지 차이점이 존재한다.
+Data Structure and Storage: Mecached: 단순 Key-Value Pair 구조이다. 간단한 String 데이터를 저장할 수 있다. Redis: 다양한 종류(String, list, set, sorted set, bit array)와 같은 다양한 구조 데이터 구조를 지원한다. Persistence Memcached: data persistence를 지원하지 않는다.]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>OS - Category - inshining</title>
+        <link>/categories/os/</link>
+        <description>OS - Category - inshining</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>inshining.kim@gmail.com (Kim In Yeob)</managingEditor>
+            <webMaster>inshining.kim@gmail.com (Kim In Yeob)</webMaster><lastBuildDate>Sun, 17 Sep 2023 16:20:02 &#43;0500</lastBuildDate><atom:link href="/categories/os/" rel="self" type="application/rss+xml" /><item>
+    <title>세마포란?</title>
+    <link>/posts/2023-09-17-semaphore/</link>
+    <pubDate>Sun, 17 Sep 2023 16:20:02 &#43;0500</pubDate>
+    <author>Kim In Yeob</author>
+    <guid>/posts/2023-09-17-semaphore/</guid>
+    <description><![CDATA[시스템프로그래밍, 데이터베이스를 공부하다보면 계속해서 세마포 개념이 등장해서 명확하게 정리하고자 한다.
+동기화 배경 지식 세마포, 스핀락은 동기화 작업을 수행하기 위한 방법이다. 동기화는 공유 데이터를 일관성을 유지하며 작업하는 것을 의미한다. 이 때 동기화를 처리하기 위한 공간을 임계 공간이라고 한다. 정리하면 세마포나 스핀락과 같은 방법은 임계 영역 안에서 처리 방법에 관한 내용이다.
+스핀락? 스핀락은 세마포보다 비교적 간단한 개념으로 스핀락의 한계로 인해서 세마포 개념이 정립되었기 때문에 스핀락부터 알아보자. 임계 영역이라는 자물쇠를 열고 들어 가기 위해서 열쇠가 필요하다.]]></description>
+</item>
+</channel>
+</rss>
