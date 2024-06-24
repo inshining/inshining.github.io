@@ -5,7 +5,7 @@ categories:
     - shell-script
 tags:
     - shell-script
-	  - text-matching
+    - text-matching
 permalink: /shell-script-text-matching
 ---
 
