@@ -4,8 +4,8 @@ date: 2023-05-30 16:20:02 +05:00
 categories:
     - git
 tags:
-  - git
-  - git-cherry-pick
+    - git
+    - git-cherry-pick
 permalink: /git-cherry-pick
 ---
 
