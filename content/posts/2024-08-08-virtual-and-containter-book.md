@@ -5,10 +5,10 @@ categories:
     - book
 tags:
     - book
-	- virtual
-	- container
-	- docker
-	- k8s
+    - virtual
+    - container
+    - docker
+    - k8s
 permalink: /virtual-and-container-book
 ---
 

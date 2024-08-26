@@ -5,7 +5,7 @@ categories:
     - book
 tags:
     - book
-	- linux
+    - linux
 permalink: /linux-just-fun-book
 ---
 
