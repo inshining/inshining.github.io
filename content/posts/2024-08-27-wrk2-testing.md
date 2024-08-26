@@ -4,8 +4,8 @@ date: 2024-08-27 16:20:02 +0500
 categories:
     - testing
 tags:
-    - wrk2
-	- codespace
+    - testing
+	- wrk2
 permalink: /wrk2-testing
 ---
 
