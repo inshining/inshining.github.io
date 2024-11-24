@@ -11,7 +11,7 @@ permalink: /java-map-compare
 
 자바로 알고리즘을 공부를 하다보면 가장 자주 사용하게 되는 패키지 중 하나는 `import java.util`이다. 이 패키지를 사용하며 `List`, `Map`, `Set`, `Queue` 를 자주 사용하게 된다. 자주 사용하는 클래스에 대해서 알아보고 싶어서 이러저런 자료를 찾다보니 다음과 같은 다이어그램을 발견했다.
 
-![java-collections-framework-diagram](/images/java-map/collections framework overview.png)
+![java-collections-framework-diagram](/images/java-map/collections_framework_overview.png)
 출처: https://www.codejava.net/java-core/collections/overview-of-java-collections-framework-api-uml-diagram
 
 `java.util` 패키지를 통으로 임포트해오면서 느끼지 못했는데. `Map`은 다른 자료구조와 다르게 `Collection` 인터페이스를 공유하지 않는다. `Map` 은 키와 밸류라는 구조로 되어 있기 때문에 다른 단일한 값을을 다수 저장하는 `collection` 인터페이스와 차이가 있는 것이다.
